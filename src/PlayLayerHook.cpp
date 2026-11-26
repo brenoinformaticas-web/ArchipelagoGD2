@@ -40,6 +40,16 @@ class $modify(APPlayLayer, PlayLayer) {
         PlayLayer::addObject(p0);
     }   
 
+    // send our own deaths; APCpp checks if DeathLink is enabled and handles the amnesty
+    void destroyPlayer(PlayerObject* player, GameObject* object) {
+        bool wasDead = !m_player1 || m_player1->m_isDead || (m_player2 && m_player2->m_isDead);
+        PlayLayer::destroyPlayer(player, object);
+        if (wasDead || object == m_anticheatSpike || APUtils::dyingFromDeathLink) return;
+        if (m_isPracticeMode || m_isTestMode || !player || !player->m_isDead) return;
+        if (AP_GetConnectionStatus() != AP_ConnectionStatus::Authenticated) return;
+        AP_DeathLinkSend();
+    }
+
     void levelComplete() {
         geode::log::debug("Called PlayLayer::levelComplete()");
         auto ccsched = cocos2d::CCScheduler::get();

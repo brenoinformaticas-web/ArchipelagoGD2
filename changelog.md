@@ -1,3 +1,7 @@
+# v1.0.0-beta.4 (unofficial)
+- Send DeathLink on your own deaths (not in practice or test mode)
+- Send each coin only once per level session
+
 # v1.0.0-beta.3 (unofficial)
 - Fix crash when completing a level with ID 0 or outside the official list
 - Fix possible crash in the level editor

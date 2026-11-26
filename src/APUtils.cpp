@@ -65,6 +65,7 @@ int APUtils::manaOrbsToAdd = 0;
 int APUtils::diamondsToAdd = 0;
 
 bool APUtils::inLoadingLayer = true;
+bool APUtils::dyingFromDeathLink = false;
 bool APUtils::GManagerRan = false;
 
 bool APUtils::coinsEnabled = true;
@@ -226,7 +227,11 @@ void APUtils::createNotification(std::string name, bool location) {
 void APUtils::deathLinkRecieved() {
     Loader::get()->queueInMainThread(
         []{
-            if (PlayLayer* playLayer = GameManager::get()->getPlayLayer()) playLayer->destroyPlayer(playLayer->m_player1, nullptr);
+            if (PlayLayer* playLayer = GameManager::get()->getPlayLayer()) {
+                APUtils::dyingFromDeathLink = true;
+                playLayer->destroyPlayer(playLayer->m_player1, nullptr);
+                APUtils::dyingFromDeathLink = false;
+            }
             geode::log::info("deathlink received. time to die");
         }
     );

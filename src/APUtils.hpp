@@ -9,6 +9,7 @@ namespace APUtils {
     extern int manaOrbsToAdd;
     extern int diamondsToAdd;
 
+    extern bool dyingFromDeathLink; // so a received death is not sent back
     extern bool inLoadingLayer;
     extern bool GManagerRan;
     extern bool coinsEnabled;
