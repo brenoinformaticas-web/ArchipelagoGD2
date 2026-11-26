@@ -57,7 +57,7 @@ class $modify(APPurchaseItemPopup, PurchaseItemPopup) {
             text->setScale(0.7f);
             for (auto i = 24; i < 24 + imageToCreate.length(); i++) { // color tags do not work here
                 auto letter = text->getChildByType<cocos2d::CCFontSprite>(i);
-                letter->setColor(ccORANGE);
+                if (letter) letter->setColor(ccORANGE);
             }
         }
         geode::log::debug("Finished PurchaseItemPopup::init()");

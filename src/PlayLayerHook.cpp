@@ -15,7 +15,7 @@ class $modify(APPlayLayer, PlayLayer) {
         if (levelID < 50) {
         auto ccsched = cocos2d::CCScheduler::get();
     if (APUtils::speed != 100) {
-        double calctw = APUtils::speed/100;
+        double calctw = APUtils::speed/100.0;
         auto difficulty = level->m_difficulty;
         auto diffNum = static_cast<int>(difficulty);
         double randWeight = geode::utils::random::generate(0.004, 0.01);
@@ -53,7 +53,7 @@ class $modify(APPlayLayer, PlayLayer) {
             if (FMODAudioEngine::get()->m_system->getMasterChannelGroup(&masterGroup) != FMOD_OK) return;
                 masterGroup->setPitch(1.00);
         }   
-        if (levelID > 128 || this->m_isPracticeMode) {
+        if (levelID < 0 || levelID >= static_cast<int>(APUtils::levels.size()) || this->m_isPracticeMode) {
             PlayLayer::levelComplete();
             return; // reaches into thje zone of normal levels
         }

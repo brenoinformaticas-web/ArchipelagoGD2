@@ -90,6 +90,10 @@ int APUtils::checkIfTower(int id) {
     }
 void APUtils::recieveItem(int64_t id, bool notify) {
     geode::log::debug("Called APUtils::recieveItem()");
+    if (id < gdBaseID || id - gdBaseID >= static_cast<int64_t>(items.size())) {
+        geode::log::warn("Unknown item id {}", id);
+        return;
+    }
     std::string itemToRecieve = items[id - gdBaseID];
     if (itemToRecieve == "100 Mana Orbs") {
         if (APUtils::inLoadingLayer) {
@@ -144,7 +148,7 @@ void APUtils::checkLocationCallback(int64_t id) {
         id -= coinNum;
         id /= 1000;
         id -= 1;
-        if (id > APUtils::levels.size() || id < 0) {
+        if (id < 0 || id >= static_cast<int64_t>(APUtils::levels.size())) {
             geode::log::warn("The id of {} was not in the levels vector!", id);
             return;
         }
@@ -156,7 +160,7 @@ void APUtils::checkLocationCallback(int64_t id) {
     );
     } else {
         if (id > 99) {
-            if (id > APUtils::shopItems.size() || id < 0) {
+            if (id < 100 || id - 100 >= static_cast<int64_t>(APUtils::shopItems.size())) {
                 geode::log::warn("The id of {} was not in the shopItems vector!", id);
                 return;
             }
@@ -169,7 +173,7 @@ void APUtils::checkLocationCallback(int64_t id) {
         }
     }
     if (id < 99) {
-        if (id > APUtils::levels.size() || id < 0) {
+        if (id < 0 || id >= static_cast<int64_t>(APUtils::levels.size())) {
             geode::log::warn("The id of {} was not in the levels vector!", id);
             return;
         }
@@ -200,7 +204,7 @@ void APUtils::sendItem(int64_t id) {
 
 void APUtils::createNotification(std::string name, bool location) {
     if (APUtils::inLoadingLayer) return;
-    if (notifsOff) return;
+    if (Mod::get()->getSettingValue<bool>("Disable Notifications")) return;
     geode::log::debug("Called APUtils::createNotification()");
     const char* title;
     std::string desc;
@@ -464,6 +468,7 @@ void APUtils::startArchipelago(const char *url, const char *slot, const char *pa
     AP_RegisterSlotDataIntCallback("speed", &APUtils::setSpeed);
     AP_RegisterSlotDataIntCallback("coins", &APUtils::setCoinsBool);
     AP_RegisterSlotDataIntCallback("coin_locks", &APUtils::setCoinLocksBool);
+    AP_RegisterSlotDataIntCallback("check_shop", &APUtils::setCheckShopBool);
     AP_RegisterSlotDataIntCallback("ultimate", &APUtils::setUltimatesBool);
     AP_RegisterSlotDataRawCallback("shop_item1", &APUtils::setShop1Item);
     AP_RegisterSlotDataRawCallback("shop_item2", &APUtils::setShop2Item);

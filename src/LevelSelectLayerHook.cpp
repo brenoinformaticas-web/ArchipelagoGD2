@@ -31,9 +31,6 @@ bool init(GJGameLevel* level) {
         // disable ther coin locks on play
         if (!APUtils::coinLocksEnabled) {
             m_level->m_requiredCoins = 0;
-        if (Mod::get()->getSavedValue<bool>(fmt::format("{}: Unlock", this->m_level->m_levelName), false) and !getChildByIDRecursive("button-menu")) {
-		    LevelPage::onPlay(sender);
-        }
         }
         // here we also check for button-menu because only the tower's levelpage has that so we can not lock it by accident
         if (bool canPlay = !Mod::get()->getSavedValue<bool>(fmt::format("{}: Unlock", this->m_level->m_levelName), false) and !getChildByIDRecursive("button-menu")) {
@@ -47,7 +44,6 @@ bool init(GJGameLevel* level) {
     void updateDynamicPage(GJGameLevel* p0) {
         if (!APUtils::coinLocksEnabled) {
             p0->m_requiredCoins = 0;
-		    LevelPage::updateDynamicPage(p0);
         }
         if (bool canPlay = !Mod::get()->getSavedValue<bool>(fmt::format("{}: Unlock", p0->m_levelName), false)) {
             LevelPage::updateDynamicPage(p0);

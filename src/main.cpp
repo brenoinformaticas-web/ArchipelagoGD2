@@ -53,8 +53,8 @@ class $modify(APMenuLayer, MenuLayer) {
         trm->addChild(apBtn);
         trm->addChild(otherBtn);
         trm->addChild(anotherBtn);
-       // otherBtn->setVisible(false);
-       // anotherBtn->setVisible(false);
+        otherBtn->setVisible(false); // debug: unlocks every level
+        anotherBtn->setVisible(false); // debug: gives mana orbs
         trm->updateLayout();
         }
         apBtn->setID("APConnectBtn"_spr);

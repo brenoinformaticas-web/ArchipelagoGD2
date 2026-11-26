@@ -8,11 +8,13 @@ class $modify(APGJBaseGameLayer, GJBaseGameLayer) {
     void processItems() {
         geode::log::debug("Called GJBaseGameLayer::processItems()");
         GJBaseGameLayer::processItems();
-        auto levelObj = PlayLayer::get()->m_level;
+        auto playLayer = PlayLayer::get();
+        if (!playLayer || !playLayer->m_level) return; // e.g. in the level editor
+        auto levelObj = playLayer->m_level;
         if (APUtils::coinsEnabled) {
             auto levelID = levelObj->m_levelID.value();
             levelID = APUtils::checkIfTower(levelID);
-            if (levelID < 100) {
+            if (levelID >= 1 && levelID <= static_cast<int>(APUtils::levels.size())) {
                 for (int i = 0; i < 3; i++) {
                     auto key = levelObj->getCoinKey(i+1);
                     auto hasCoin = GameStatsManager::sharedState()->hasSecretCoin(key);

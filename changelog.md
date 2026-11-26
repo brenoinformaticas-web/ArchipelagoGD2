@@ -1,3 +1,12 @@
+# v1.0.0-beta.3 (unofficial)
+- Fix crash when completing a level with ID 0 or outside the official list
+- Fix possible crash in the level editor
+- Fix speed option (integer division)
+- Fix Check Shop notifications and the check_shop option being ignored
+- Fix levels being started/updated twice with coin locks off
+- Hide debug buttons
+- Add bounds checks; "Disable Notifications" applies without restart
+
 # v1.0.0-beta.1
 - Revamp APWorld (Update to Archipelago 0.6.7)
 - Fix crash by reentering the shop once you bought an item
