@@ -7,8 +7,8 @@
 using namespace geode::prelude;
 
 class $modify(APPlayLayer, PlayLayer) {
-    bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
-        if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
+    bool init(GJGameLevel* level, bool dontCreateObjects) {
+        if (!PlayLayer::init(level, dontCreateObjects)) return false;
         geode::log::debug("Called PlayLayer::init()");
         auto levelID = level->m_levelID.value();
         levelID = APUtils::checkIfTower(levelID);

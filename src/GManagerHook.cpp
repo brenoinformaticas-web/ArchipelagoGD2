@@ -1,5 +1,7 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/GManager.hpp>
+#include <asp/fs/std.hpp>
+#include <filesystem>
 #include "APUtils.hpp"
 using namespace geode::prelude;
 
@@ -10,10 +12,22 @@ class $modify(APGManager, GManager) {
             GManager::setup();
             return;
         }
-        auto saves = geode::dirs::getSaveDir();
+        auto saveDir = geode::dirs::getSaveDir().toStdPath();
+        auto gameDir = geode::dirs::getGameDir().toStdPath();
+        if (!saveDir.isOk() || !gameDir.isOk()) {
+            log::error("Could not resolve game folders, leaving save data untouched");
+            APUtils::errorMessage = "Could not resolve the game folders. Save data was not touched.";
+            Mod::get()->setSavedValue<bool>("InitArchMode", false);
+            Mod::get()->setSavedValue<bool>("StayingInArchMode", false);
+            APUtils::GManagerRan = true;
+            GManager::setup();
+            return;
+        }
+        std::filesystem::path saves = saveDir.unwrap();
+        std::filesystem::path game = gameDir.unwrap();
         if (Mod::get()->getSavedValue<bool>("InitArchMode", false)) {
             std::error_code error;
-            auto dir = dirs::getGameDir();
+            
             if (!std::filesystem::exists(saves / "ArchGDBackupedSave")) {
                 std::filesystem::create_directory(saves / "ArchGDBackupedSave", error);
             }
@@ -40,10 +54,10 @@ class $modify(APGManager, GManager) {
             if (error) {
                 APUtils::errorMessage = fmt::format("Unable to backup your save data, Error: {} Code: {} Extra information printed to logs", error.message(), error.value());
                 log::warn("Unable to copy file to ArchGDBackupedSave: Error: {} Code: {}", error.message(), error.value());
-                if (!std::filesystem::exists(dirs::getSaveDir())) {
+                if (!std::filesystem::exists(saves)) {
                     log::warn("The save directory is literally not existent.");
                 }
-                if (!std::filesystem::exists(dirs::getGameDir())) {
+                if (!std::filesystem::exists(game)) {
                     log::warn("The game directory is literally not existent.");
                 }
                 if (!std::filesystem::exists(saves / "ArchGDBackupedSave")) {

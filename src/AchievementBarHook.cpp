@@ -1,3 +1,6 @@
+#include <Geode/Geode.hpp>
+// AchievementBar::init has no iOS address in the 2.2091 bindings
+#ifndef GEODE_IS_IOS
 #include <Geode/modify/AchievementBar.hpp>
 
 using namespace geode::prelude;
@@ -15,3 +18,4 @@ class $modify(APAchievementBar, AchievementBar) {
         return true;
     }
 };
+#endif
